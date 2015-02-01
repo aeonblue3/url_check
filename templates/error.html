@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h3><span class="label label-danger">Error</span> Something went wrong!<br>
+  <small>{{ url }} didn't seem to work out for you.</small></h3>
+  <br>
+  {{ super() }}
+{% endblock %}
