@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect
-from httplib import HTTPConnection
+from httplib import HTTPConnection, responses
 import re
 
 app = Flask(__name__)
@@ -13,24 +13,21 @@ def urlchecker():
 @app.route('/results', methods=['POST', 'GET'])
 def results():
   if request.method == 'POST':
-    code = get_status_code(request.form['url'])
-    if code:
+    try:
+      code = get_status_code(request.form['url'])
       code_object = get_http_code(code)
       return render_template('results.html', code=code, name=code_object['name'], description=code_object['description'], url=request.form['url'])
-    else:
-      return render_template('error.html', url=request.form['url'])
+    except StandardError as e:
+      return render_template('error.html', url=request.form['url'], errorcode=e.errno, error=e.strerror)
   else:
     return redirect(url_for('/'))
 
 def get_status_code(hostname):
   url_parts = split_url(hostname)
   print url_parts
-  try:
-    conn = HTTPConnection(url_parts['domain'])
-    conn.request('HEAD', url_parts['path'])
-    return conn.getresponse().status
-  except StandardError:
-    return None
+  conn = HTTPConnection(url_parts['domain'], 80, timeout=10)
+  conn.request('HEAD', url_parts['path'])
+  return conn.getresponse().status
 
 def split_url(hostname):
   match = re.search('(http|https)://', hostname)
