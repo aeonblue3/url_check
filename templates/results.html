@@ -4,6 +4,6 @@
 {% endblock %}
 {% block content %}
   {{ super() }}
-  <p><span class="label {% if code > 499 %}label-danger{% elif code > 399 %}label-warning{% elif code > 299 %}label-info{% elif code > 199 %}label-success{% else %}label-default{% endif %}">{{ code }}</span> {{ name }} - <span class="url">{{ url }}</span></p>
+  <p><span class="label {% if code > 499 %}label-danger{% elif code > 399 %}label-warning{% elif code > 299 %}label-info{% elif code > 199 %}label-success{% else %}label-default{% endif %}">{{ code }}</span> {{ name }} - <span class="url"><a href="{{ url }}" target="_BLANK" title="{{ url }}">{{ url }}</a></span></p>
   <p>{{ description }}</p>
 {% endblock %}
